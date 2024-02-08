@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import Todo from './components/Todo';
-import { query, collection, onSnapshot } from 'firebase/firestore';
+import { query, collection, onSnapshot, updateDoc, doc } from 'firebase/firestore';
 import { db } from './firebase';
 
 const style = {
@@ -36,6 +36,13 @@ function App() {
 
 
   //update todo
+  const toggleComplete = async (todo) => { //create a function to toggle the completed status of a todo
+    await updateDoc(doc(db, "todo", todo.id), { //update the document with the id of the todo
+      completed: !todo.completed //set the completed field to the opposite of the current value
+    });
+  }
+
+
   //delete todo
 
   return (
@@ -48,7 +55,7 @@ function App() {
         </form>
         <ul className={style.list}>
           {todos.map((todo, index) => (
-            <Todo key={index} todo={todo} />
+            <Todo key={index} todo={todo} toggleComplete={toggleComplete} />
           ))}
         </ul>
         <p className={style.p}>You have {todos.length} {todos.length > 1 ? "todos" : "todo"} left</p>
