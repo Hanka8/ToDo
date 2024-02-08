@@ -2,3 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+.hyphens {
+  hyphens: auto;
+  word-wrap: anywhere;
+}

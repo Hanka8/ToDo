@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import Todo from './components/Todo';
-import { query, collection, onSnapshot, updateDoc, doc } from 'firebase/firestore';
+import { query, collection, onSnapshot, updateDoc, doc, addDoc } from 'firebase/firestore';
 import { db } from './firebase';
 
 const style = {
   bg: `h-screen w-screen p-4 bg-gradient-to-r from-[#290075] to-[#3e00b1]`,
-  container: `bg-slate-100 max-w- [500px w-full m-auto] rounded-md shadow-xl p-4`,
+  container: `bg-slate-100 max-w-[600px] w-full m-auto rounded-md shadow-xl p-4`,
   heading: `text-3xl font-bold text-black mb-4 text-center`,
   form: `flex items-center`,
   input: `w-full p-2 rounded-md shadow-md`,
@@ -18,8 +18,18 @@ const style = {
 function App() {
 
   const [todos, setTodos] = useState([]);
+  const [input, setInput] = useState('');
 
   //create todo
+  const createTodo = async (e) => {
+    e.preventDefault(e);
+    if (input === '') return;
+    //add a new document with a generated id
+    await addDoc(collection(db, "todo"), {
+      text: input,
+      completed: false
+    });
+  };
 
   //read todo
   useEffect(() => {
@@ -49,8 +59,8 @@ function App() {
     <div className={style.bg}>
       <div className={style.container}>
         <h1 className={style.heading}>Todo App</h1>
-        <form className={style.form}>
-          <input type="text" placeholder="Add Todo" className={style.input} />
+        <form onSubmit={createTodo} className={style.form}>
+          <input value={input} onChange={e => setInput(e.target.value)} type="text" placeholder="Add Todo" className={style.input} />
           <button type="submit" className={style.button}><AiOutlinePlus size={30} /></button>
         </form>
         <ul className={style.list}>
