@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import Todo from './components/Todo';
-import { query, collection, onSnapshot, updateDoc, doc, addDoc } from 'firebase/firestore';
+import { query, collection, onSnapshot, updateDoc, doc, addDoc, deleteDoc } from 'firebase/firestore';
 import { db } from './firebase';
 
 const style = {
@@ -44,7 +44,6 @@ function App() {
   return () => unsubscribe();
   }, []);
 
-
   //update todo
   const toggleComplete = async (todo) => { //create a function to toggle the completed status of a todo
     await updateDoc(doc(db, "todo", todo.id), { //update the document with the id of the todo
@@ -52,8 +51,10 @@ function App() {
     });
   }
 
-
   //delete todo
+  const deleteTodo = async (todo) => { //create a function to delete a todo
+    await deleteDoc(doc(db, "todo", todo.id)); //delete the document with the id of the todo
+  }
 
   return (
     <div className={style.bg}>
@@ -65,10 +66,10 @@ function App() {
         </form>
         <ul className={style.list}>
           {todos.map((todo, index) => (
-            <Todo key={index} todo={todo} toggleComplete={toggleComplete} />
+            <Todo key={index} todo={todo} toggleComplete={toggleComplete} deleteTodo={deleteTodo} />
           ))}
         </ul>
-        <p className={style.p}>You have {todos.length} {todos.length > 1 ? "todos" : "todo"} left</p>
+        {todos.length < 1 ? "You have completed all your tasks!" : <p className={style.p}>You have {todos.length} {todos.length > 1 ? "todos" : "todo"} left</p>}
       </div>
     </div>
   )

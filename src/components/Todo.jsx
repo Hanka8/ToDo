@@ -11,14 +11,14 @@ const style = {
     checkbox: `w-6 h-6 mr-4 rounded-md shadow-md cursor-pointer`
 }
 
-export default function Todo( { todo, toggleComplete } ) {
+export default function Todo( { todo, toggleComplete, deleteTodo } ) {
   return (
     <li className={todo.completed ? style.liComplete : style.li}>
         <div className={style.row}>
             <input onChange={() => toggleComplete(todo)} className={style.checkbox} type="checkbox" checked={todo.completed ? "checked" : ""}/>
             <p onClick={() => toggleComplete(todo)} className={todo.completed ? style.textComplete : style.text}>{todo.text}</p>
         </div>
-        <button className={style.button}><FaRegTrashAlt /></button>
+        <button onClick={() => deleteTodo(todo)} className={style.button}><FaRegTrashAlt /></button>
     </li>
   )
 }
