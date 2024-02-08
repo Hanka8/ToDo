@@ -10,7 +10,7 @@ function App() {
   //create todo
   //read todo
   //update todo
-  //delete todo
+  //delete todo c
   
   return (
     <div className={style.bg}>
